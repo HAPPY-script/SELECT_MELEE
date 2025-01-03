@@ -1,0 +1,91 @@
+game.StarterGui:SetCore("SendNotification", {
+    Title = "Create by HAPPY script⚜";
+    Text = "Select Melee V2📌";
+    Duration = 5;
+})
+
+local CommF = game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("CommF_")
+local player = game.Players.LocalPlayer
+
+-- Hàm mua võ
+local function buyFightingStyle(styleName, args)
+    local success, result = pcall(function()
+        return CommF:InvokeServer(styleName, unpack(args or {}))
+    end)
+    if success then
+        print("Successfully bought " .. styleName)
+    else
+        warn("Failed to buy " .. styleName .. ": " .. tostring(result))
+    end
+end
+
+-- Giao diện menu mua võ
+local function createMenu()
+    -- Kiểm tra và xóa menu cũ nếu đã tồn tại
+    if player.PlayerGui:FindFirstChild("FightingStyleGui") then
+        player.PlayerGui.FightingStyleGui:Destroy()
+    end
+
+    local ScreenGui = Instance.new("ScreenGui", player.PlayerGui)
+    ScreenGui.Name = "FightingStyleGui"
+
+    local Frame = Instance.new("Frame", ScreenGui)
+    Frame.Position = UDim2.new(0.4, 0, 0.3, 0)
+    Frame.Size = UDim2.new(0, 400, 0, 300)
+    Frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    Frame.BorderSizePixel = 0
+    Frame.Active = true
+    Frame.Draggable = true
+
+    local Title = Instance.new("TextLabel", Frame)
+    Title.Text = "Buy Fighting Styles"
+    Title.Size = UDim2.new(1, 0, 0.15, 0)
+    Title.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Title.Font = Enum.Font.SourceSansBold
+    Title.TextSize = 20
+
+    local function createButton(name, position, callback)
+        local Button = Instance.new("TextButton", Frame)
+        Button.Text = name
+        Button.Size = UDim2.new(0.8, 0, 0.1, 0)
+        Button.Position = position
+        Button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+        Button.Font = Enum.Font.SourceSans
+        Button.TextSize = 18
+        Button.MouseButton1Click:Connect(callback)
+    end
+
+    -- Tạo nút cho từng loại võ
+    local styles = {
+        {Title = "Dragon Talon (ƒ5,000 $3,000,000)", Command = "BuyDragonTalon"},
+        {Title = "Superhuman ($3,000,000)", Command = "BuySuperhuman"},
+        {Title = "Death Step (ƒ5,000 $5,000,000)", Command = "BuyDeathStep"},
+        {Title = "Sharkman Karate (ƒ5,000 $2,500,000)", Command = "BuySharkmanKarate"},
+        {Title = "Electric Claw (ƒ5,000 $3,000,000)", Command = "BuyElectricClaw"},
+        {Title = "God Human (ƒ5,000 $5,000,000)", Command = "BuyGodhuman"},
+        {Title = "Sanguine Art (ƒ5,000 $5,000,000)", Command = "BuySanguineArt", Args = {true}},
+    }
+
+    for i, style in ipairs(styles) do
+        createButton(style.Title, UDim2.new(0.1, 0, 0.15 + (i * 0.1), 0), function()
+            buyFightingStyle(style.Command, style.Args)
+        end)
+    end
+
+    -- Nút xóa menu
+    local DeleteButton = Instance.new("TextButton", Frame)
+    DeleteButton.Text = "X"
+    DeleteButton.Size = UDim2.new(0, 25, 0, 25)
+    DeleteButton.Position = UDim2.new(1, -30, 0, 5)
+    DeleteButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    DeleteButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    DeleteButton.Font = Enum.Font.SourceSansBold
+    DeleteButton.TextSize = 14
+    DeleteButton.MouseButton1Click:Connect(function()
+        ScreenGui:Destroy()
+    end)
+end
+
+createMenu()
