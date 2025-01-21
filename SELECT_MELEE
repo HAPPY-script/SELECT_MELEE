@@ -65,7 +65,7 @@ local function createMenu()
         {Title = "Sharkman Karate (ƒ5,000 $2,500,000)", Command = "BuySharkmanKarate"},
         {Title = "Electric Claw (ƒ5,000 $3,000,000)", Command = "BuyElectricClaw"},
         {Title = "God Human (ƒ5,000 $5,000,000)", Command = "BuyGodhuman"},
-        {Title = "Sanguine Art (ƒ5,000 $5,000,000)", Command = "BuySanguineArt", Args = {true}},
+        {Title = "Sanguine Art (ƒ5,000 $5,000,000)", Command = "BuySanguineArt"},
     }
 
     for i, style in ipairs(styles) do
